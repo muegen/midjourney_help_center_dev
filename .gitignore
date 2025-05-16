@@ -1,1 +1,4 @@
 README.md
+
+# Ignore all files in the backup directory
+backup/*
