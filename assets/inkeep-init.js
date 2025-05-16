@@ -195,7 +195,6 @@ const config = {
         },
         renderMessageButtons: ({ args }) => {
           const confidence = args.aiAnnotations.answerConfidence;
-          console.log("confidence: ", confidence);
           if (["not_confident", "no_sources", "other"].includes(confidence)) {
             return [
               {
