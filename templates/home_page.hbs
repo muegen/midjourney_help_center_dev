@@ -1,0 +1,755 @@
+{{! Hero element }}
+<div class="hero relative overflow-hidden{{#is settings.hero_image_style 'standard'}} bg-home bg-cover bg-center{{/is}}">
+
+  {{! Hero element content }}
+  <div class="relative container z-30 py-6 {{#if settings.fixed_header}}lg:pb-6{{else}}lg:py-{{#if settings.hero_heading}}6{{else}}9{{/if}}{{/if}}"{{#if settings.fixed_header}} style="margin-top: {{settings.header_height}};"{{/if}}>
+
+    {{! Hero element title }}
+    <div class="my-5 text-{{settings.hero_content_alignment}}{{#unless settings.hero_heading}}{{#unless settings.hero_text}} hidden{{/unless}}{{/unless}}">
+      {{~#if settings.hero_heading}}
+        <h1 class="my-4 font-size-4xl lg:font-size-5xl">
+          {{~#if settings.use_translations}}
+            {{dc settings.hero_heading}}
+          {{else}}
+            {{settings.hero_heading}}
+          {{/if~}}
+        </h1>
+      {{/if~}}
+      {{~#if settings.hero_text}}
+        <p class="font-size-xl">
+          {{~#if settings.use_translations}}
+            {{dc settings.hero_text}}
+          {{else}}
+            {{settings.hero_text}}
+          {{/if~}}
+        </p>
+      {{/if~}}
+    </div>
+
+    {{! Hero element search bar }}
+    <div class="search search-lg font-size-lg text-base max-w-md my-4{{#is settings.hero_content_alignment 'center'}} mx-auto{{/is}}">
+      <div id="inkeepSearchBarHero"></div>
+    </div>
+
+    {{! Popular keywords }}
+    {{~#isnt settings.popular_keywords_style 'none'}}
+      {{~#if settings.popular_keywords}}
+        <div id="popular-keywords">
+          <script type="text/javascript">
+            ready(function() {
+              Util.renderTemplate(document.getElementById('popular-keywords'), 'popular-keywords', {
+                keywords: '{{#if settings.use_translations}}{{dc settings.popular_keywords}}{{else}}{{settings.popular_keywords}}{{/if}}'
+              });
+            })
+          </script>
+        </div>
+      {{/if~}}
+    {{/isnt~}}
+
+  </div>
+
+  {{! Hero background image (overlay) }}
+  {{~#isnt settings.hero_image_style 'standard'}}
+    {{~#isnt settings.hero_image_style 'parallax'}}
+      <div class="absolute z-20 top-0 left-0 h-full w-full bg-home{{#is settings.hero_image_style 'overlay'}} bg-cover bg-center{{/is}}{{#is settings.hero_image_style 'overlay-pattern'}} bg-contain bg-repeat{{/is}}"></div>
+    {{/isnt~}}
+  {{/isnt~}}
+
+  {{! Hero background color }}
+  <div class="absolute z-10 top-0 left-0 h-full w-full bg-hero"></div>
+
+  {{! Hero background image (parallax) }}
+  {{~#is settings.hero_image_style 'parallax'}}
+    <div class="absolute z-0 top-0 left-0 w-full h-full">
+      <div class="relative w-full h-full overflow-hidden">
+        <div class="absolute top-0 left-0 w-full bg-home bg-cover bg-center" x-data="Widgets.parallaxImage" style="height: 150%"></div>
+      </div>
+    </div>
+  {{/is~}}
+
+  {{! SVG dividers }}
+  {{~#isnt settings.hero_element_shape 'none'}}
+    <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+      {{~#is settings.hero_element_shape 'book'}}class="svg-shape -mt-4 rotate-180" viewBox="0 0 1200 120"{{/is~}}
+      {{~#is settings.hero_element_shape 'curve'}}class="svg-shape -mt-6" viewBox="0 0 100 100"{{/is~}}
+      {{~#is settings.hero_element_shape 'curves'}}class="svg-shape -mt-6 rotate-180" viewBox="0 0 240 24"{{/is~}}
+      {{~#is settings.hero_element_shape 'diagonal'}}class="svg-shape -mt-4 rotate-180" viewBox="0 0 1000 100"{{/is~}}
+      {{~#is settings.hero_element_shape 'hills'}}class="svg-shape -mt-4" viewBox="0 0 240 24"{{/is~}}
+      {{~#is settings.hero_element_shape 'mountains'}}class="svg-shape rotate-180" viewBox="0 0 1000 100"{{/is~}}
+      {{~#is settings.hero_element_shape 'rays'}}class="svg-shape rotate-180" viewBox="0 0 2600 130.1"{{/is~}}
+      {{~#is settings.hero_element_shape 'triangle'}}class="svg-shape rotate-180" viewBox="0 0 1000 100"{{/is~}}
+      {{~#is settings.hero_element_shape 'wave'}}class="svg-shape rotate-180" viewBox="0 0 1000 100"{{/is~}}
+      {{~#is settings.hero_element_shape 'waves'}}class="svg-shape rotate-180" viewBox="0 0 283.5 27.8"{{/is~}}
+      {{~#is settings.hero_element_shape 'zigzag'}}class="svg-shape rotate-180" viewBox="0 0 1000 100"{{/is~}}>
+      <use xlink:href="#shape-{{settings.hero_element_shape}}" />
+    </svg>
+  {{/isnt~}}
+
+</div> {{! /.hero }}
+
+<div class="relative flex flex-column z-40" id="page-container">
+
+  {{! Notification }}
+  {{~#is settings.notification_location 'home'}}
+    {{~#if settings.notification_content}}
+      <div
+        class="flex-first"
+        data-element="template"
+        data-template="notification">
+      </div>
+    {{/if~}}
+  {{/is~}}
+
+  {{! Custom blocks }}
+  {{#isnt settings.custom_block_style 'none'}}
+    <div class="custom-blocks bg-custom-blocks" id="custom-blocks">
+      <script type="text/javascript">
+        ready(function() {
+          Util.renderTemplate(document.getElementById('custom-blocks'), 'custom-blocks', Theme.customBlocks);
+        })
+      </script>
+    </div>
+  {{/isnt}}
+
+  {{! Content (category/section) blocks }}
+  {{#isnt settings.content_block_style 'none'}}
+    <div class="content-blocks bg-content-blocks{{#is settings.content_block_style '1-boxes'}} border-bottom{{/is}}" id="content-blocks">
+      <div class="container py-4 md:text-{{settings.content_block_alignment}}">
+        {{#if (compare settings.content_block_style '<=' '8')}}
+          {{! Built-in content blocks }}
+
+          {{#if settings.content_blocks_heading}}
+            <h2 class="inline-flex align-items-baseline mt-6 font-size-3xl lg:font-size-4xl" x-data="{ src: Theme.assets['content-blocks-heading'] }">
+              <template x-if="src">
+                <img class="svg-icon mr-2" src="{{asset 'placeholder.png'}}" alt="" aria-hidden="true" :src="src" />
+              </template>
+              {{#if settings.use_translations}}
+                {{dc settings.content_blocks_heading}}
+              {{else}}
+                {{settings.content_blocks_heading}}
+              {{/if}}
+            </h2>
+          {{/if}}
+
+          {{! Cards style }}
+          {{#is settings.content_block_style '1-cards'}}
+            <ul class="list-unstyled row row-sm my-4 justify-content-{{#is settings.content_block_alignment 'left'}}start{{else}}center{{/is}}">
+              {{#each categories}}
+                {{#if ../has_multiple_categories}}
+                  <li class="col-12 mb-4
+                    {{~#if (compare ../settings.number_content_block_columns ">=" "2")}} md:col-6{{/if~}}
+                    {{~#if (compare ../settings.number_content_block_columns ">=" "3")}} lg:col-4{{/if~}}
+                    {{~#if (compare ../settings.number_content_block_columns "==" "4")}} xl:col-3{{/if~}}">
+                    <a class="block md:p-4 rounded text-inherit {{#is ../settings.color_content_blocks 'white'}}bg-white{{else}}text-{{../settings.color_content_blocks}}-inverse bg-{{../settings.color_content_blocks}} hover:text-{{../settings.color_content_blocks}}-inverse{{/is}} h-full shadow-lg transition-fast hover:text-inherit hover:no-underline hover:grow" href="{{url}}">
+                      <div class="flex align-items-{{#is ../settings.content_block_alignment 'left'}}start{{else}}center{{/is}} md:py-4 md:flex-column">
+                        {{#if ../settings.content_block_image_height}}
+                          <img class="m-4 invisible md:m-2" alt="{{name}}" src="
+                            {{~#is @index 0~}}{{../settings.content_block_1_image}}{{~/is~}}
+                            {{~#is @index 1~}}{{../settings.content_block_2_image}}{{~/is~}}
+                            {{~#is @index 2~}}{{../settings.content_block_3_image}}{{~/is~}}
+                            {{~#is @index 3~}}{{../settings.content_block_4_image}}{{~/is~}}
+                            {{~#is @index 4~}}{{../settings.content_block_5_image}}{{~/is~}}
+                            {{~#is @index 5~}}{{../settings.content_block_6_image}}{{~/is~}}
+                            {{~#is @index 6~}}{{../settings.content_block_7_image}}{{~/is~}}
+                            {{#if (compare @index ">=" 7)}}{{../settings.content_block_8_image}}{{/if}}
+                          " style="height: {{../settings.content_block_image_height}}; width: auto;" x-data="{ src: Theme.assets['category-{{id}}'] }" x-init="$el.src = src ? src : $el.src" :class="{ 'invisible': false }" />
+                        {{/if}}
+                        <div class="mx-2">
+                          <h3 class="h4 mt-4{{#if description}} mb-0{{/if}} font-medium{{#isnt ../settings.color_content_blocks 'white'}} text-inherit{{/isnt}}">
+                            {{name}}
+                          </h3>
+                          {{#if description}}
+                            <p class="mt-2 font-size-md">
+                              {{description}}
+                            </p>
+                          {{/if}}
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                {{else}}
+                  {{#each sections}}
+                    <li class="col-12 mb-4
+                      {{~#if (compare ../../settings.number_content_block_columns ">=" "2")}} md:col-6{{/if~}}
+                      {{~#if (compare ../../settings.number_content_block_columns ">=" "3")}} lg:col-4{{/if~}}
+                      {{~#if (compare ../../settings.number_content_block_columns "==" "4")}} xl:col-3{{/if~}}">
+                      <a class="block md:p-4 rounded text-inherit {{#is ../../settings.color_content_blocks 'white'}}bg-white{{else}}text-{{../../settings.color_content_blocks}}-inverse bg-{{../../settings.color_content_blocks}} hover:text-{{../../settings.color_content_blocks}}-inverse{{/is}} h-full shadow-lg transition-fast hover:text-inherit hover:no-underline hover:grow" href="{{url}}">
+                        <div class="flex align-items-{{#is ../../settings.content_block_alignment 'left'}}start{{else}}center{{/is}} md:py-4 md:flex-column">
+                          {{#if ../../settings.content_block_image_height}}
+                            <img class="m-4 invisible md:m-2" alt="{{name}}" src="
+                              {{~#is @index 0~}}{{../../settings.content_block_1_image}}{{~/is~}}
+                              {{~#is @index 1~}}{{../../settings.content_block_2_image}}{{~/is~}}
+                              {{~#is @index 2~}}{{../../settings.content_block_3_image}}{{~/is~}}
+                              {{~#is @index 3~}}{{../../settings.content_block_4_image}}{{~/is~}}
+                              {{~#is @index 4~}}{{../../settings.content_block_5_image}}{{~/is~}}
+                              {{~#is @index 5~}}{{../../settings.content_block_6_image}}{{~/is~}}
+                              {{~#is @index 6~}}{{../../settings.content_block_7_image}}{{~/is~}}
+                              {{#if (compare @index ">=" 7)}}{{../../settings.content_block_8_image}}{{/if}}
+                          " style="height: {{../../settings.content_block_image_height}}; width: auto;" x-data="{ src: Theme.assets['section-{{id}}'] }" x-init="$el.src = src ? src : $el.src" :class="{ 'invisible': false }" />
+                          {{/if}}
+                          <div class="mx-2">
+                            <h3 class="h4 mt-4{{#if description}} mb-0{{/if}} font-medium{{#isnt ../../settings.color_content_blocks 'white'}} text-inherit{{/isnt}}">
+                              {{name}}
+                            </h3>
+                            {{#if description}}
+                              <p class="mt-2 font-size-md">
+                                {{description}}
+                              </p>
+                            {{/if}}
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                  {{/each}}
+                {{/if}}
+              {{/each}}
+            </ul>
+          {{/is}}
+
+          {{! Tree style }}
+          {{#is settings.content_block_style '2-tree'}}
+            {{#each categories}}
+              <div class="py-4 {{#is (calc @index '%' 2) 0}}category-odd{{else}}category-even{{/is}}">
+                <h2 class="h1 text-{{../settings.content_block_alignment}} border-bottom pb-5 mb-3">
+                  <a class="text-inherit hover:no-underline" href="{{url}}">
+                    {{name}}
+                  </a>
+                </h2>
+                {{#if sections}}
+                  <ul class="row list-unstyled">
+                    {{#each sections}}
+                      <li class="col-12 mb-4{{~#is ../../settings.article_list_columns '1'}} md:col-6 xl:col-4{{/is~}}" id="section-{{id}}">
+                        <h3>
+                          <a class="text-inherit" href="{{url}}">
+                            {{name}}
+                          </a>
+                        </h3>
+                        {{#if articles}}
+                          <div id="article-list-{{id}}">
+                            {{#if (compare ../../settings.article_list_style '<=' '8')}}
+
+                              {{! Built-in article list }}
+                              <ul class="row row-{{#is ../../settings.article_list_style '1-bullet'}}flush list-disc{{else}}sm list-unstyled{{/is}}">
+                                {{~#each articles}}
+                                  <li class="col-12
+                                    {{~#if (compare ../../../settings.article_list_columns ">=" "2")}} md:col-6{{/if~}}
+                                    {{~#if (compare ../../../settings.article_list_columns ">=" "3")}} lg:col-4{{/if~}}">
+
+                                    <div class="relative media align-items-baseline py-2 h-full
+                                      {{~#is ../../../settings.article_list_style '1-bullet'}} pr-7{{/is~}}
+                                      {{~#is ../../../settings.article_list_excerpt 0}} font-light{{/is~}}
+                                      {{~#is ../../../settings.article_list_style '3-bordered'}} border-bottom{{#is ../../../settings.article_list_columns "1"}}{{#if @last}} border-bottom-0{{/if}}{{/is}}{{/is~}}">
+
+                                      {{~#is ../../../settings.article_list_style '3-bordered'}}
+                                        <div class="flex" x-data="{ src: Theme.assets['article'] }">
+                                          <template x-if="src">
+                                            <img class="svg-icon mr-3" src="{{asset 'placeholder.png'}}" alt="" aria-hidden="true" :src="src" />
+                                          </template>
+                                        </div>
+                                      {{/is~}}
+
+                                      <div class="media-body">
+                                        <a class="link-stretched text-inherit{{~#is ../../../settings.promoted_article_style 'bold'}}{{#if promoted}} font-medium{{/if}}{{/is~}}" href="{{url}}">
+                                          {{~title~}}
+                                        </a>
+                                        {{~#is ../../../settings.promoted_article_style 'icon'}}
+                                          {{~#if promoted}}
+                                            <svg class="svg-icon ml-1 fill-current text-orange-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426 405" aria-hidden="true">
+                                              <title>{{t 'promoted'}}</title>
+                                              <use xlink:href="#icon-star" />
+                                            </svg>
+                                          {{/if~}}
+                                        {{/is~}}
+                                        {{~#if internal~}}
+                                          <svg class="svg-icon ml-1 fill-current text-base" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
+                                            <title>{{t 'internal'}}</title>
+                                            <use xlink:href="#icon-lock" />
+                                          </svg>
+                                        {{~/if~}}
+                                        {{~#isnt ../../../settings.article_list_excerpt 0}}
+                                          <p class="my-2 font-size-md break-words font-normal">
+                                            {{excerpt body characters=../../../settings.article_list_excerpt}}
+                                          </p>
+                                        {{/isnt~}}
+                                      </div>
+                                    </div>
+                                  </li>
+                                {{/each~}}
+                              </ul>
+                              {{#if more_articles}}
+                                <p>
+                                  <a class="text-base hover:text-base" href="{{url}}">
+                                    {{t 'show_all_articles' count=article_count}}
+                                  </a>
+                                </p>
+                              {{/if}}
+                            {{else}}
+
+                              {{! Custom article list micro-template }}
+                              <script type="text/javascript">
+                                ready(function() {
+                                  new Navigation(document.getElementById('article-list-{{id}}'), {
+                                    collection: Theme.contentBlocks || {},
+                                    template: 'articles',
+                                    sectionId: {{id}},
+                                    templateData: {
+                                      sectionId: {{id}}{{#if more_articles}},
+                                      showAll: "{{t 'show_all_articles' count=article_count}}"{{/if}}
+                                    }
+                                  });
+                                });
+                              </script>
+                            {{/if}}
+                          </div>
+                        {{else}}
+                          <p>
+                            <a class="text-base hover:text-base" href="{{url}}">
+                              {{t 'empty'}}
+                            </a>
+                          </p>
+                        {{/if}}
+                      </li>
+                    {{/each}}
+                  </ul>
+                {{else}}
+                  <p>
+                    <a class="text-base hover:text-base" href="{{url}}">
+                      {{t 'empty'}}
+                    </a>
+                  </p>
+                {{/if}}
+              </div>
+            {{/each}}
+          {{/is}}
+
+          {{! Tabs style }}
+          {{#is settings.content_block_style '3-tabs'}}
+
+            {{! Tab navigation }}
+            {{#if has_multiple_categories}}
+              <div class="flex flex-wrap align-items-center my-4 -mx-2 lg:my-6" x-data="{ selected: '{{#each categories}}{{#if @first}}{{id}}{{/if}}{{/each}}' }">
+                {{#each categories}}
+                  <a class="flex flex-row align-items-center card border-2 p-3 mx-2 mb-2 link-plain transition w-full md:w-auto md:p-5 md:mb-4 hover:border-primary" href="#category-{{id}}" data-toggle="tab" role="tab" :class="{ 'border-primary text-primary': selected === '{{id}}' }" @click="selected = '{{id}}'">
+                    <img class="svg-icon h-5 w-5" data-inline-svg alt="{{name}}" src="
+                      {{~#is @index 0~}}{{../settings.content_block_1_image}}{{~/is~}}
+                      {{~#is @index 1~}}{{../settings.content_block_2_image}}{{~/is~}}
+                      {{~#is @index 2~}}{{../settings.content_block_3_image}}{{~/is~}}
+                      {{~#is @index 3~}}{{../settings.content_block_4_image}}{{~/is~}}
+                      {{~#is @index 4~}}{{../settings.content_block_5_image}}{{~/is~}}
+                      {{~#is @index 5~}}{{../settings.content_block_6_image}}{{~/is~}}
+                      {{~#is @index 6~}}{{../settings.content_block_7_image}}{{~/is~}}
+                      {{#if (compare @index ">=" 7)}}{{../settings.content_block_8_image}}{{/if}}
+                    " />
+                    <h3 class="h4 my-0 mx-3 font-medium">
+                      {{name}}
+                    </h3>
+                  </a>
+                {{/each}}
+              </div>
+            {{else}}
+              {{#each categories}}
+                <div class="flex flex-wrap align-items-center my-6 -mx-2" x-data="{ selected: '{{#each sections}}{{#if @first}}{{id}}{{/if}}{{/each}}' }">
+                  {{#each sections}}
+                    <a class="flex flex-row align-items-center card border-2 p-3 mx-2 mb-2 link-plain transition w-full md:w-auto md:p-5 md:mb-4 hover:border-primary" href="#section-{{id}}" data-toggle="tab" role="tab" :class="{ 'border-primary text-primary': selected === '{{id}}' }" @click="selected = '{{id}}'">
+                      <img class="svg-icon h-5 w-5" data-inline-svg alt="{{name}}" src="
+                        {{~#is @index 0~}}{{../../settings.content_block_1_image}}{{~/is~}}
+                        {{~#is @index 1~}}{{../../settings.content_block_2_image}}{{~/is~}}
+                        {{~#is @index 2~}}{{../../settings.content_block_3_image}}{{~/is~}}
+                        {{~#is @index 3~}}{{../../settings.content_block_4_image}}{{~/is~}}
+                        {{~#is @index 4~}}{{../../settings.content_block_5_image}}{{~/is~}}
+                        {{~#is @index 5~}}{{../../settings.content_block_6_image}}{{~/is~}}
+                        {{~#is @index 6~}}{{../../settings.content_block_7_image}}{{~/is~}}
+                        {{#if (compare @index ">=" 7)}}{{../../settings.content_block_8_image}}{{/if}}
+                      " />
+                      <h3 class="h4 my-0 mx-3 font-medium">
+                        {{name}}
+                      </h3>
+                    </a>
+                  {{/each}}
+                </div>
+              {{/each}}
+            {{/if}}
+
+            {{! Tab content }}
+            {{#each categories}}
+              {{#if ../has_multiple_categories}}
+                <div class="tab fade mt-6{{#if @first}} is-active is-shown{{/if}}" id="category-{{id}}" role="tabpanel">
+                  <ul class="list-unstyled md:column-count-2">
+                    {{#if sections}}
+                      {{#each sections}}
+                        <li class="inline-block w-full py-4 px-6 mb-4 border border-radius">
+                          <h4 class="my-4">
+                            <a class="text-inherit hover:text-inherit" href="{{url}}">
+                              {{name}}
+                            </a>
+                          </h4>
+                          <ul class="list-unstyled">
+                            {{#if articles}}
+                              {{#each articles}}
+                                <li class="list-item">
+                                  <a class="text-inherit hover:text-inherit" href="{{url}}">
+                                    {{title}}
+                                  </a>
+                                </li>
+                              {{/each}}
+                              {{#if more_articles}}
+                                <li class="list-item mt-5">
+                                  <a class="text-inherit hover:text-inherit" href="{{url}}">
+                                    {{t 'show_all_articles' count=article_count}}
+                                  </a>
+                                </li>
+                              {{/if}}
+                            {{else}}
+                              <li class="list-item">
+                                {{t 'empty'}}
+                              </li>
+                            {{/if}}
+                          </ul>
+                        </li>
+                      {{/each}}
+                    {{else}}
+                      <li class="block p-4 mb-4 text-left">
+                        {{t 'empty'}}
+                      </li>
+                    {{/if}}
+                  </ul>
+                </div>
+              {{else}}
+                {{#each sections}}
+                  <div class="tab fade mt-6{{#if @first}} is-active is-shown{{/if}}" id="section-{{id}}" role="tabpanel">
+                    <ul class="list-unstyled md:column-count-2">
+                      <li class="inline-block w-full py-4 px-6 mb-4 border border-radius">
+                        <h4 class="my-4">
+                          <a class="text-inherit hover:text-inherit" href="{{url}}">
+                            {{name}}
+                          </a>
+                        </h4>
+                        <ul class="list-unstyled">
+                          {{#if articles}}
+                            {{#each articles}}
+                              <li class="list-item">
+                                <a class="text-inherit hover:text-inherit" href="{{url}}">
+                                  {{title}}
+                                </a>
+                              </li>
+                            {{/each}}
+                            {{#if more_articles}}
+                              <li class="list-item mt-5">
+                                <a class="text-inherit hover:text-inherit" href="{{url}}">
+                                  {{t 'show_all_articles' count=article_count}}
+                                </a>
+                              </li>
+                            {{/if}}
+                          {{else}}
+                            <li class="list-item">
+                              {{t 'empty'}}
+                            </li>
+                          {{/if}}
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                {{/each}}
+              {{/if}}
+            {{/each}}
+
+          {{/is}}
+
+        {{else}}
+
+          {{! Custom micro-template }}
+          <script type="text/javascript">
+            ready(function() {
+              new Navigation(document.getElementById('content-blocks'), {
+                collection: Theme.contentBlocks,
+                template: 'content-blocks',
+                templateData: {
+                  heading: {{#if settings.use_translations}}{{json_stringify (dc settings.content_blocks_heading)}}{{else}}{{json_stringify settings.content_blocks_heading}}{{/if}},
+                  images: [
+                    "{{settings.content_block_1_image}}", "{{settings.content_block_2_image}}", "{{settings.content_block_3_image}}", "{{settings.content_block_4_image}}",
+                    "{{settings.content_block_5_image}}", "{{settings.content_block_6_image}}", "{{settings.content_block_7_image}}", "{{settings.content_block_8_image}}"
+                  ],
+                  imageHeight: "{{settings.content_block_image_height}}",
+                  numberColumns: {{settings.number_content_block_columns}},
+                  alignment: "{{settings.content_block_alignment}}",
+                  color: "{{settings.color_content_blocks}}"
+                }
+              });
+            })
+          </script>
+        {{/if}}
+
+        {{pagination}}
+
+      </div>
+    </div>
+  {{/isnt}}
+
+  {{! Promoted articles }}
+  {{#isnt settings.promoted_article_list_style 'none'}}
+    <div class="promoted-articles bg-no-repeat bg-cover bg-center bg-bottom bg-gray-100{{#is settings.promoted_article_list_position 'before'}} flex-first{{/is}}" id="promoted-articles" style="background-image: url({{settings.article_background_image}})">
+      <div class="container md:text-{{settings.promoted_articles_alignment}} py-{{#is settings.promoted_article_list_position 'before'}}6{{else}}4{{/is}}">
+        {{#if (compare settings.promoted_article_list_style '<=' '8')}}
+
+          {{! Built-in styles }}
+          {{~#if settings.promoted_articles_heading}}
+            <h2 class="inline-flex align-items-baseline font-size-3xl lg:font-size-4xl" x-data="{ src: Theme.assets['promoted-articles-heading'] }">
+              <template x-if="src">
+                <img class="svg-icon mr-2" src="{{asset 'placeholder.png'}}" alt="" aria-hidden="true" :src="src" />
+              </template>
+              {{~#if settings.use_translations}}
+                {{dc settings.promoted_articles_heading}}
+              {{else}}
+                {{settings.promoted_articles_heading}}
+              {{/if~}}
+            </h2>
+          {{/if~}}
+
+          {{#if promoted_articles}}
+            {{#is settings.promoted_article_list_style '4-cards'}}
+
+              {{! Cards style }}
+              <ul class="list-unstyled row row-sm my-4">
+                {{#each promoted_articles}}
+                  <li class="col-12 mb-4
+                    {{~#if (compare ../settings.promoted_article_list_columns ">=" "2")}} md:col-6{{/if~}}
+                    {{~#if (compare ../settings.promoted_article_list_columns ">=" "3")}} lg:col-4{{/if~}}">
+                    <a class="block md:p-4 rounded bg-white h-full text-inherit shadow-lg transition-fast hover:no-underline hover:grow" href="{{url}}">
+                      <div class="flex align-items-{{#is ../settings.promoted_articles_alignment 'left'}}start{{else}}center{{/is}} md:py-4 md:flex-column">
+                        {{#if ../settings.promoted_article_image_height}}
+                          <img class="m-4 invisible md:m-2" alt="{{title}}" src="{{asset 'promoted-article.svg'}}" style="height: {{../settings.promoted_article_image_height}}; width: auto" x-data="{ src: Theme.assets['promoted-article-{{id}}'] }" x-init="$el.src = src ? src : $el.src" :class="{ 'invisible': false }"  />
+                        {{/if}}
+                        <h3 class="h4 font-medium my-4 mx-2">
+                          {{title}}
+                        </h3>
+                        {{~#isnt ../settings.promoted_article_list_excerpt 0}}
+                          <p class="font-size-md text-base break-words font-normal">
+                            {{excerpt body characters=../settings.promoted_article_list_excerpt}}
+                          </p>
+                        {{/isnt~}}
+                      </div>
+                    </a>
+                  </li>
+                {{/each}}
+              </ul>
+            {{else}}
+
+              {{! List styles }}
+              <ul class="row row-{{#is settings.promoted_article_list_style '1-bullet'}}flush list-disc{{else}}sm list-unstyled{{/is}}">
+                {{~#each promoted_articles}}
+                  <li class="col-12
+                    {{~#if (compare ../settings.promoted_article_list_columns ">=" "2")}} md:col-6{{/if~}}
+                    {{~#if (compare ../settings.promoted_article_list_columns ">=" "3")}} lg:col-4{{/if~}}">
+
+                    <div class="relative media align-items-baseline py-3 h-full
+                      {{~#is ../settings.promoted_article_list_style '1-bullet'}} pr-7{{/is~}}
+                      {{~#isnt ../settings.promoted_article_list_excerpt 0}} font-semibold{{/isnt~}}
+                      {{~#is ../settings.promoted_article_list_style '3-bordered'}} border-bottom{{#is ../settings.promoted_article_list_columns "1"}}{{#if @last}} border-bottom-0{{/if}}{{/is}}{{/is~}}">
+
+                      {{~#is ../settings.promoted_article_list_style '3-bordered'}}
+                        <div class="flex" x-data="{ src: Theme.assets['article'] }">
+                          <template x-if="src">
+                            <img class="svg-icon mr-3" src="{{asset 'placeholder.png'}}" alt="" aria-hidden="true" :src="src" />
+                          </template>
+                        </div>
+                      {{/is~}}
+
+                      <div class="media-body">
+                        <a class="link-stretched" href="{{url}}">
+                          {{~title~}}
+                        </a>
+                        {{~#if internal~}}
+                          <svg class="svg-icon ml-1 fill-current text-base" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
+                            <title>{{t 'internal'}}</title>
+                            <use xlink:href="#icon-lock" />
+                          </svg>
+                        {{~/if~}}
+                        {{~#isnt ../settings.promoted_article_list_excerpt 0}}
+                          <p class="my-2 font-size-md font-normal break-words">
+                            {{excerpt body characters=../settings.promoted_article_list_excerpt}}
+                          </p>
+                        {{/isnt~}}
+                      </div>
+                    </div>
+                  </li>
+                {{/each~}}
+              </ul>
+            {{/is}}
+          {{else}}
+            <p>
+              {{t 'empty'}}
+            </p>
+          {{/if~}}
+        {{else}}
+
+          {{! Custom micro-template }}
+          <script type="text/javascript">
+            ready(function() {
+              Util.renderTemplate(document.getElementById('promoted-articles'), 'promoted-articles', Theme.promotedArticles);
+            });
+          </script>
+        {{/if}}
+      </div>
+    </div>
+  {{/isnt}}
+
+  {{! Video Library }}
+  {{#if settings.promoted_video_ids}}
+    <div class="video-library">
+      <div class="container py-4">
+        {{~#if settings.promoted_videos_heading}}
+          <h2 class="inline-flex align-items-baseline my-4" x-data="{ src: Theme.assets['promoted-videos-heading'] }">
+            <template x-if="src">
+              <img class="svg-icon mr-2" src="{{asset 'placeholder.png'}}" alt="" aria-hidden="true" :src="src" />
+            </template>
+            {{~#if settings.use_translations}}
+              {{dc settings.promoted_videos_heading}}
+            {{else}}
+              {{settings.promoted_videos_heading}}
+            {{/if~}}
+          </h2>
+        {{/if~}}
+        <div class="relative overflow-hidden"
+          data-element="video-library"
+          data-layout="carousel"
+          data-template="video-library"
+          data-play-inline="false"
+          data-ids="
+          {{~#if settings.use_translations}}
+            {{dc settings.promoted_video_ids}}
+          {{else}}
+            {{settings.promoted_video_ids}}
+          {{/if~}}">
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{! Recent activity }}
+  {{~#isnt settings.recent_activity 'none'}}
+    <div class="recent-activity">
+      <div class="container py-4">
+        {{~#is settings.recent_activity 'community'}}
+          {{recent_activity scope='community'}}
+        {{else}}
+          {{recent_activity}}
+        {{/is~}}
+      </div>
+    </div>
+  {{/isnt~}}
+
+  {{! Contact blocks }}
+  {{#isnt settings.contact_block_style 'none'}}
+    <div class="contact-blocks" id="contact-blocks">
+      <script type="text/javascript">
+        ready(function() {
+          Util.renderTemplate(document.getElementById('contact-blocks'), 'contact-blocks', Theme.contactBlocks);
+        })
+      </script>
+    </div>
+  {{/isnt}}
+
+</div> {{! /#page-container }}
+
+{{! Call-to-action }}
+{{~#isnt settings.cta_style 'none'}}
+  {{~#isnt settings.cta_style 'sidebar'}}
+    {{~#isnt settings.cta_location 'internal'}}
+      <div
+        data-element="template"
+        data-template="call-to-action">
+      </div>
+    {{/isnt~}}
+  {{/isnt~}}
+{{/isnt~}}
+
+<script type="text/javascript">
+  {{! Category, section and promoted article image assets }}
+  {{~#each categories}}
+    {{~#if (asset id prefix='category-' suffix='.svg')~}}Theme.assets['category-{{id}}'] = "{{asset id prefix='category-' suffix='.svg'}}";{{~/if~}}
+    {{~#if (asset id prefix='category-' suffix='.png')~}}Theme.assets['category-{{id}}'] = "{{asset id prefix='category-' suffix='.png'}}";{{~/if~}}
+    {{~#if (asset id prefix='category-' suffix='.jpg')~}}Theme.assets['category-{{id}}'] = "{{asset id prefix='category-' suffix='.jpg'}}";{{~/if~}}
+    {{~#if (asset id prefix='category-' suffix='.jpeg')~}}Theme.assets['category-{{id}}'] = "{{asset id prefix='category-' suffix='.jpeg'}}";{{~/if~}}
+    {{~#each sections}}
+      {{~#if (asset id prefix='section-' suffix='.svg')~}}Theme.assets['section-{{id}}'] = "{{asset id prefix='section-' suffix='.svg'}}";{{~/if~}}
+      {{~#if (asset id prefix='section-' suffix='.png')~}}Theme.assets['section-{{id}}'] = "{{asset id prefix='section-' suffix='.png'}}";{{~/if~}}
+      {{~#if (asset id prefix='section-' suffix='.jpg')~}}Theme.assets['section-{{id}}'] = "{{asset id prefix='section-' suffix='.jpg'}}";{{~/if~}}
+      {{~#if (asset id prefix='section-' suffix='.jpeg')~}}Theme.assets['section-{{id}}'] = "{{asset id prefix='section-' suffix='.jpeg'}}";{{~/if~}}
+    {{~/each~}}
+  {{~/each~}}
+  {{~#each promoted_articles~}}
+    {{~#if (asset id prefix='promoted-article-' suffix='.svg')~}}Theme.assets['promoted-article-{{id}}'] = "{{asset id prefix='promoted-article-' suffix='.svg'}}";{{~/if~}}
+    {{~#if (asset id prefix='promoted-article-' suffix='.png')~}}Theme.assets['promoted-article-{{id}}'] = "{{asset id prefix='promoted-article-' suffix='.png'}}";{{~/if~}}
+    {{~#if (asset id prefix='promoted-article-' suffix='.jpg')~}}Theme.assets['promoted-article-{{id}}'] = "{{asset id prefix='promoted-article-' suffix='.jpg'}}";{{~/if~}}
+    {{~#if (asset id prefix='promoted-article-' suffix='.jpeg')~}}Theme.assets['promoted-article-{{id}}'] = "{{asset id prefix='promoted-article-' suffix='.jpeg'}}";{{~/if~}}
+  {{/each}}
+
+  {{! Category/section data for custom templates }}
+  {{~#isnt settings.content_block_style 'none'}}
+    {{~#unless (compare settings.content_block_style '<=' '8')}}
+    Theme.contentBlocks = { categories: [], sections: [], articles: [] };
+      {{~#each categories~}}
+      Theme.contentBlocks.categories.push({
+        id: {{id}},
+        name: {{json_stringify name}},
+        {{~#if description}}description: {{json_stringify description}},{{/if~}}
+        html_url: {{json_stringify url}}
+      });
+        {{~#each sections~}}
+        Theme.contentBlocks.sections.push({
+          id: {{id}},
+          category_id: {{../id}},
+          parent_section_id: null,
+          name: {{json_stringify name}},
+          {{~#if description}}description: {{json_stringify description}},{{/if~}}
+          html_url: {{json_stringify url}},
+          {{~#if article_count}}article_count: {{article_count}},{{/if~}}
+          {{~#if more_articles}}view_all_articles: {{json_stringify (t 'show_all_articles' count=article_count)}},{{/if~}}
+        });
+          {{~#each articles~}}
+          Theme.contentBlocks.articles.push({
+            id: {{id}},
+            section_id: {{../id}},
+            title: {{json_stringify title}},
+            {{~#if body}}{{#if ../../../settings.article_list_excerpt}}body: {{json_stringify (excerpt body characters=../../../settings.article_list_excerpt)}},{{/if}}{{/if~}}
+            html_url: {{json_stringify url}},
+            created_at: "{{created_at}}",
+            {{~#isnt created_at edited_at}}edited_at: "{{edited_at}}",{{/isnt~}}
+            {{~#if promoted}}promoted: {{promoted}},{{/if~}}
+            {{~#if internal}}internal: {{internal}},{{/if~}}
+            {{~#if comment_count}}comment_count: {{comment_count}},{{/if~}}
+            {{~#if vote_count}}vote_count: {{vote_count}},{{/if~}}
+            author: { name: {{json_stringify author.name}},{{~#if author.url}} html_url: {{json_stringify author.url}},{{/if~}}avatar_url: {{json_stringify author.avatar_url}}, agent: {{author.agent}} }
+          });
+          {{/each}}
+        {{/each}}
+      {{/each}}
+    {{/unless~}}
+  {{/isnt~}}
+
+  {{! Promoted article data for custom templates }}
+  {{~#isnt settings.promoted_article_list_style 'none'}}
+    {{~#unless (compare settings.promoted_article_list_style '<=' '8')}}
+    Theme.promotedArticles = {
+      articles: [{{~#each promoted_articles~}}{
+        id: {{id}},
+        title: {{json_stringify title}},
+        {{#if body}}body: {{#isnt ../settings.promoted_article_list_excerpt 0}}{{json_stringify (excerpt body)}}{{else}}{{json_stringify body}}{{/isnt}},{{/if}}
+        html_url: {{json_stringify url}},
+        created_at: "{{created_at}}",
+        {{~#isnt created_at edited_at}}edited_at: "{{edited_at}}",{{/isnt~}}
+        {{~#if internal}}internal: {{internal}},{{/if~}}
+        {{~#if comment_count}}comment_count: {{comment_count}},{{/if~}}
+        {{~#if vote_count}}vote_count: {{vote_count}},{{/if~}}
+        author: { name: {{json_stringify author.name}},{{#if author.url}} html_url: {{json_stringify author.url}},{{/if}} avatar_url: {{json_stringify author.avatar_url}}, agent: {{author.agent}} },
+        section: {{#each path_steps}}{{#if @first}}{
+          name: {{json_stringify name}},
+          html_url: {{json_stringify url}}
+        }{{/if}}{{/each}}
+      }{{#unless @last}},{{/unless}}{{~/each~}}]
+    };
+    {{/unless~}}
+  {{/isnt~}}
+</script>
+
+<script type="text/javascript">document.documentElement.classList.add('home-page')</script>

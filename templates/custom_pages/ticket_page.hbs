@@ -1,0 +1,126 @@
+<script type="module" src="https://unpkg.com/@inkeep/widget-js@0.5.0-rc.1/dist/embed.js" crossorigin="anonymous" defer>
+ </script>
+<div class="container flex-1" id="page-container">
+
+
+
+    <div class="row row-lg">
+
+        <div class="relative col{{~#is settings.category_sidebar 'none'}}{{~#isnt settings.cta_style 'sidebar'}} lg:col-12 mx-auto{{/isnt~}}{{/is~}}">
+          
+					<div class="flex flex-col h-full min-h-0 max-h-full justify-center items-center py-8 mx-auto">
+           	<div id="inkeep-form" class="mx-auto" style="width: 500px; max-height: 100vh; height: 100%;"></div> 
+          </div>
+
+        </div>
+
+    </div> {{! /.row }}
+</div> {{! /#page-container }}
+
+<script type="module">
+
+
+    const baseSettings = {
+      apiKey: '312595ac219859f425dfae513bd3aa57dae1f0cd2f0ac2e5', // replace with your api key
+      "primaryBrandColor": "#efc5bb",
+      "organizationDisplayName": "Midjourney",
+    }
+
+    export const formConfig = {
+      primary: {
+        fields: [
+          {
+            label: 'Name',
+            name: 'name',
+            inputType: 'TEXT',
+            required: true,
+          },
+          {
+            label: 'Email',
+            name: 'email',
+            inputType: 'EMAIL',
+            required: true,
+          },
+          {
+            label: 'How can we help?',
+            name: 'additionalDetails',
+            inputType: 'TEXTAREA',
+            placeholder: 'Please provide any additional details that may be helpful.',
+          },
+        ],
+      },
+      secondary: {
+        description: {
+          default: 'To finish submitting a support ticket, confirm the fields below and click Submit.',
+          confident: 'Understood. Please confirm the below information:',
+        },
+        fields: [
+          {
+            label: 'Subject line',
+            name: 'subject',
+            inputType: 'TEXT',
+            required: true,
+            description: 'Overview of the issue',
+            defaultValue: 'General Inquiry',
+          },
+          {
+            label: 'Priority',
+            name: 'priority',
+            inputType: 'SELECT',
+            required: true,
+            items: [
+              { label: 'Urgent', value: 'URGENT' },
+              { label: 'High', value: 'HIGH' },
+              { label: 'Medium', value: 'MEDIUM' },
+              { label: 'Low', value: 'LOW' },
+            ],
+            placeholder: 'Select a priority',
+          },
+          {
+            label: 'Ticket type',
+            name: 'ticketType',
+            inputType: 'SELECT',
+            required: true,
+            items: [
+              { label: 'Talk to sales', value: 'talk_to_sales' },
+              { label: 'Issue in production', value: 'issue_in_production' },
+              { label: 'Issue in development', value: 'issue_in_development' },
+              { label: 'Report bug', value: 'report_bug' },
+              { label: 'Onboarding help', value: 'onboarding_help' },
+              { label: 'Account management', value: 'account_management' },
+              { label: 'Feature request', value: 'feature_request' },
+            ],
+            placeholder: 'Select a ticket type',
+          },
+        ],
+      },
+      successView: {
+        heading: 'Thank you!',
+        message: "We'll be in touch soon",
+      },
+      onSubmit: async (values) => {
+        // replace with your submit function
+        console.log(values)
+      },
+    }
+
+    const initializeForm = (targetElementId) => {
+      const targetElement = document.querySelector(targetElementId);
+      if (!targetElement) {
+        console.warn(`No element found for selector: ${targetElementId}`);
+        return;
+      }
+
+
+      try {
+        const intelligentForm = Inkeep.IntelligentForm(targetElementId, { baseSettings, formConfig })
+      } catch (error) {
+        console.error(
+          `Failed to initialize Form for ${targetElementId}:`,
+          error
+        );
+      }
+    };
+    initializeForm('#inkeep-form');
+
+  </script>
